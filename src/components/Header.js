@@ -28,28 +28,19 @@ export const LogoMDBFlix = styled.img`
 const Header = ({
   searchTerm,
   setSearchTerm,
-  showFilter,
-  setShowFilter,
+
   setMovies,
   setSubmitted,
-  showSuggestions,
-  setShowSuggestions,
 }) => (
   <Wrapper>
     <Content>
-      <LogoMDBFlix
-        src={MLOGO}
-        alt="mdb-logo"
-        onClick={() => setShowFilter(!showFilter)}
-      />
+      <LogoMDBFlix src={MLOGO} alt="mdb-logo" />
       <InputForm>
         <SearchBar
           setSearchTerm={setSearchTerm}
           searchTerm={searchTerm}
           setMovies={setMovies}
           setSubmitted={setSubmitted}
-          showSuggestions={showSuggestions}
-          setShowSuggestions={setShowSuggestions}
         />
       </InputForm>
     </Content>

@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-// Components
 import Header from "./Header";
 import Grid from "./Grid/Grid";
 import Thumb from "./Thumb/Thumb";
-import Filter from "./Filter/Filter";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
-  const [dateStart, setDateStart] = useState(new Date(1970, 12, 1));
-  const [dateEnd, setDateEnd] = useState(new Date(2022, 1, 4));
-  const [genre, setGenre] = useState({ value: "", label: "" });
-  const [rating, setRating] = useState(0);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showNeedEndpointMessage, setShowNeedEndpointMessage] = useState(false);
 
   // INSERT YOUR CREATED MOVIE ENDPOINTS
-  const MOVIES_ENDPOINT = "";
+  const MOVIES_ENDPOINT =
+    "https://eu-west-2.aws.data.mongodb-api.com/app/moviesearchapp-ttuxq/endpoint/movies";
 
   const fetchMovies = async (searchTerm) => {
     console.log("HITTING FETCH MOVIES API");
@@ -27,9 +20,9 @@ const Home = () => {
 
     try {
       // BASIC SEARCH - append searchTerm as URL parameter to GET endpoint
-      const endpoint = MOVIES_ENDPOINT + "?searchTerm=" + searchTerm; //+ "&rating=" + rating;
+      const endpoint = MOVIES_ENDPOINT + "?searchTerm=" + searchTerm;
       const returnedMovies = await (await fetch(endpoint)).json();
-      //setMovies(returnedMovies);
+      setMovies(returnedMovies);
       console.log("MOVIES: ", returnedMovies);
     } catch (error) {
       console.log(error);
@@ -44,7 +37,7 @@ const Home = () => {
     }
 
     fetchMovies(searchTerm);
-    setShowSuggestions(false);
+
     setSubmitted(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitted]);
@@ -55,29 +48,10 @@ const Home = () => {
       <Header
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        setShowFilter={setShowFilter}
-        showFilter={showFilter}
         setMovies={setMovies}
         setSubmitted={setSubmitted}
-        showSuggestions={showSuggestions}
-        setShowSuggestions={setShowSuggestions}
       />
       <div className="container">
-        {showFilter && (
-          <Filter
-            dateStart={dateStart}
-            dateEnd={dateEnd}
-            setDateStart={setDateStart}
-            setDateEnd={setDateEnd}
-            genre={genre}
-            setGenre={setGenre}
-            rating={rating}
-            setRating={setRating}
-            setSubmitted={setSubmitted}
-            searchTerm={searchTerm}
-          />
-        )}
-
         {showNeedEndpointMessage ? (
           <div className="needEndpoint">Build Movie 📽️ Endpoint Please 🥺</div>
         ) : (

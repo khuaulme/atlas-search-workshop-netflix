@@ -1,8 +1,0 @@
-{
-  phrase:{
-    query: searchTerm,
-    path:["title", "fullplot", "plot"],
-    slop:0
-    },
-  highlight:{path:'fullplot'}
-}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import Header from "./Header";
 import Grid from "./Grid/Grid";
 import Thumb from "./Thumb/Thumb";
@@ -10,9 +9,8 @@ const Home = () => {
   const [submitted, setSubmitted] = useState(false);
   const [showNeedEndpointMessage, setShowNeedEndpointMessage] = useState(false);
 
-  // INSERT YOUR CREATED MOVIE ENDPOINTS
-  const MOVIES_ENDPOINT =
-    "https://eu-west-2.aws.data.mongodb-api.com/app/moviesearchapp-ttuxq/endpoint/movies";
+  // INSERT YOUR CREATED MOVIE ENDPOINT
+  const MOVIES_ENDPOINT = "";
 
   const fetchMovies = async (searchTerm) => {
     console.log("HITTING FETCH MOVIES API");

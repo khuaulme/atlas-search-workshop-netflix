@@ -1,6 +1,0 @@
-{
-	text:{
-		query:'Harry Potter',
-		path:'title'
-	}
-}

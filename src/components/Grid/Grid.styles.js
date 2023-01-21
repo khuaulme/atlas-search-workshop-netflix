@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   /* max-width: var(--maxWidth); */
-  max-width: 70%;
+  max-width: 90%;
   margin: 0 auto;
-  padding: 0 100px;
+  padding: 0 40px;
 
   h1 {
     color: var(--medGray);
@@ -16,5 +16,5 @@ export const Wrapper = styled.div`
 export const Content = styled.div`
   display: grid;
   grid-template-columns: auto auto auto auto;
-  grid-gap: 1rem;
+  grid-gap: 4rem;
 `;

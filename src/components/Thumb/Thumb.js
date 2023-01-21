@@ -3,8 +3,16 @@ import React from "react";
 import { Wrapper, Content, Image, ScoreBadge } from "./Thumb.styles";
 
 const Thumb = ({ movie, image, movieID, clickable }) => {
+  console.log("rendeering thumbs");
   const score = movie.score.toString().slice(0, 5);
-  const plotWithHighlights = buildPlotHighlights(movie.highlights);
+
+  let existingHighlights = false;
+
+  let plot = movie.fullplot;
+  if (movie.highlights) {
+    existingHighlights = true;
+    plot = buildPlotHighlights(movie.highlights);
+  }
   const rating = movie.imdb.rating;
 
   return (
@@ -15,8 +23,11 @@ const Thumb = ({ movie, image, movieID, clickable }) => {
         <ScoreBadge>Score: {score}</ScoreBadge>
         <h3>Year: {movie.year}</h3>
         <h3>Rating: {rating}</h3>
-
-        <h4 dangerouslySetInnerHTML={{ __html: plotWithHighlights }}></h4>
+        {existingHighlights ? (
+          <h4 dangerouslySetInnerHTML={{ __html: plot }}></h4>
+        ) : (
+          <h4>{plot}</h4>
+        )}
       </Content>
     </Wrapper>
   );

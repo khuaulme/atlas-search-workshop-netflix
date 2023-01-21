@@ -7,14 +7,12 @@ const Thumb = ({ movie, image, movieID, clickable }) => {
   const score = movie.score.toString().slice(0, 5);
 
   let existingHighlights = false;
+  let plot = movie.fullplot;
 
-  let plot = "";
   if (movie.highlights) {
+    // handle highlights returned in payload
     existingHighlights = true;
     plot = buildPlotHighlights(movie.highlights);
-  } else {
-    plot = movie.fullplot;
-    // no highlights in payload
   }
   const rating = movie.imdb.rating;
 

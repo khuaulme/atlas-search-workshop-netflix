@@ -33,9 +33,8 @@ const Home = () => {
       setShowNeedEndpointMessage(true);
       return;
     }
-
+    setShowNeedEndpointMessage(false);
     fetchMovies(searchTerm);
-
     setSubmitted(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitted]);

@@ -6,8 +6,6 @@ import { Wrapper, Content } from "./SearchBar.styles";
 const SearchBar = ({ searchTerm, setSearchTerm, setSubmitted }) => {
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("ENTERED SEARCH BAR");
-
     setSubmitted(true);
   };
 

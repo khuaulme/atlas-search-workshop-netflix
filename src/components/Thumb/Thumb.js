@@ -17,7 +17,6 @@ const Thumb = ({ movie, image, movieID, clickable }) => {
   const releaseDate = movie.released;
   let releaseString = "";
   if (typeof releaseDate === "string") {
-    console.log("STRING!");
     releaseString = releaseDate.slice(0, 10);
   }
 

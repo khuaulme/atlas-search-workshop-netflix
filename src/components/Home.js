@@ -10,7 +10,11 @@ const Home = () => {
   const [showNeedEndpointMessage, setShowNeedEndpointMessage] = useState(false);
 
   // INSERT YOUR CREATED MOVIE ENDPOINT
-  const MOVIES_ENDPOINT = "";
+  const MOVIES_ENDPOINT =
+    " https://eu-west-2.aws.data.mongodb-api.com/app/moviesearchapp-ttuxq/endpoint/movies_practice";
+  // "https://eu-west-2.aws.data.mongodb-api.com/app/moviesearchapp-ttuxq/endpoint/movies";
+  // practice
+  // https://eu-west-2.aws.data.mongodb-api.com/app/moviesearchapp-ttuxq/endpoint/movies_practice
 
   const fetchMovies = async (searchTerm) => {
     console.log("HITTING FETCH MOVIES API");

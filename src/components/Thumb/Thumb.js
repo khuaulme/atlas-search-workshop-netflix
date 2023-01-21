@@ -3,7 +3,6 @@ import React from "react";
 import { Wrapper, Content, Image, ScoreBadge } from "./Thumb.styles";
 
 const Thumb = ({ movie, image, movieID, clickable }) => {
-  console.log("rendeering thumbs");
   const score = movie.score.toString().slice(0, 5);
 
   let existingHighlights = false;

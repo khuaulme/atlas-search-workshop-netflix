@@ -40,7 +40,6 @@ Future Atlas Search features to implement can include:
 This application is hosted entirely on Realm and calls 2 API endpoints:
  
  * getProductsEndpoint in the Home.js page on line 24
- * Suggestions_AC_Endpoint, used for autocompleted product names, in the Header.js component on line 17.
 
 <p><em>Currently this app is not suitable for mobile, but feel free to send a PR.</em> 😊</p>
 

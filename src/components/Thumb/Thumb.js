@@ -4,7 +4,15 @@ import { Wrapper, Content, Image, ScoreBadge } from "./Thumb.styles";
 
 const Thumb = ({ movie, image, movieID, clickable }) => {
   const score = movie.score.toString().slice(0, 5);
-  const plotWithHighlights = buildPlotHighlights(movie.highlights);
+
+  let existingHighlights = false;
+  let plot = movie.fullplot;
+  if (movie.highlights) {
+    // handle highlights returned in payload
+    existingHighlights = true;
+    plot = buildPlotHighlights(movie.highlights);
+  }
+
   const rating = movie.imdb.rating;
   const releaseDate = movie.released;
   const releaseString = releaseDate.slice(0, 10);
@@ -24,8 +32,11 @@ const Thumb = ({ movie, image, movieID, clickable }) => {
         <h3>Rating: {rating}</h3>
         <h4>RELEASE DATE: {releaseString}</h4>
         <h2 style={{ color: "#CCFF00" }}>{genreString}</h2>
-
-        <h4 dangerouslySetInnerHTML={{ __html: plotWithHighlights }}></h4>
+        {existingHighlights ? (
+          <h4 dangerouslySetInnerHTML={{ __html: plot }}></h4>
+        ) : (
+          <h4>{plot}</h4>
+        )}
       </Content>
     </Wrapper>
   );

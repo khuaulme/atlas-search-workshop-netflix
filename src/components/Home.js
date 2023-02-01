@@ -8,9 +8,8 @@ import Thumb from "./Thumb/Thumb";
 import Filter from "./Filter/Filter";
 
 const Home = () => {
-  // INSERT YOUR CREATED MOVIE ENDPOINTS
-
-  const MOVIES_ENDPOINT_FILTERED = "";
+  // INSERT YOUR CREATED MOVIE ENDPOINT
+  const MOVIES_ENDPOINT_COMPOUND = "";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +26,7 @@ const Home = () => {
     console.log("HITTING FETCH MOVIES API");
     console.log("SEARCHTERM: ", searchTerm);
 
-    let GET_MOVIES_ENDPOINT = MOVIES_ENDPOINT_FILTERED;
+    let GET_MOVIES_ENDPOINT = MOVIES_ENDPOINT_COMPOUND;
 
     try {
       let data = {
@@ -41,7 +40,7 @@ const Home = () => {
 
       axios.post(GET_MOVIES_ENDPOINT, data).then((res) => {
         console.log(res.data);
-        setMovies(res.data.results);
+        setMovies(res.data.movies);
       });
     } catch (error) {
       console.log(error);
@@ -50,7 +49,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!submitted) return;
-    if (MOVIES_ENDPOINT_FILTERED === "") {
+    if (MOVIES_ENDPOINT_COMPOUND === "") {
       console.log("");
       setShowNeedEndpointMessage(true);
       return;
@@ -114,16 +113,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// const MOVIES_ENDPOINT =
-//   "https://us-east-1.aws.data.mongodb-api.com/app/netflixclone-xwaaq/endpoint/movies";
-
-// const MOVIES_ENDPOINT_FILTERED =
-//   "https://us-east-1.aws.data.mongodb-api.com/app/netflixclone-xwaaq/endpoint/moviesFiltered";
-
-// const MOVIES_ENDPOINT_ADVANCED =
-//   "https://us-east-1.aws.data.mongodb-api.com/app/netflixclone-xwaaq/endpoint/getMoviesAdvanced";
-
-// endpoint =
-//   MOVIES_ENDPOINT_ADVANCED +
-//   `?arg=${searchTerm}&start=${dateStart}&end=${dateEnd}&genre=${genre.value}&rating=${sliderValue}`;

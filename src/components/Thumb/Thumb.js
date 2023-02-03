@@ -46,7 +46,6 @@ function buildPlotHighlights(highlights) {
   let highlightString = "";
 
   highlights.forEach((highlight) => {
-    console.log(highlight.texts);
     let texts = highlight.texts;
     texts.forEach((text) => {
       if (text.type === "hit")

@@ -87,7 +87,6 @@ const Filter = ({
 
       <button
         onClick={() => {
-          console.log("CLICKING BUTTON");
           setSubmitted(true);
         }}
       >

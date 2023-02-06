@@ -1,15 +1,72 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import searchIcon from "../../images/search-icon.svg";
+import AutoSuggestions from "../AutoSuggestions";
 
 import { Wrapper, Content } from "./SearchBar.styles";
 
-const SearchBar = ({ searchTerm, setSearchTerm, setMovies, setSubmitted }) => {
+const SearchBar = ({
+  searchTerm,
+  setSearchTerm,
+  setMovies,
+  setSubmitted,
+  showSuggestions,
+  setShowSuggestions,
+  autocompleted,
+  setAutocompleted,
+}) => {
+  const initial = useRef(true); // a mutable variable that will not affect state - and won't trigger a re-render
+
+  const [suggestions, setSuggestions] = useState([]);
+
+  const TITLES_ENDPOINT = "";
+
+  const fetchAutocompleteTitles = async (searchTerm) => {
+    if (TITLES_ENDPOINT === "") {
+      console.log("BUILD AUTOCOMPLETE ENDPOINT");
+      return;
+    }
+    let endpoint = TITLES_ENDPOINT;
+    if (searchTerm) {
+      endpoint = TITLES_ENDPOINT + `?arg=${searchTerm}`;
+    }
+    try {
+      let names = await (await fetch(endpoint)).json();
+      setSuggestions(names);
+      console.log("I SET SUGGESTIONS HERE ");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("ENTERED SEARCH BAR");
-
+    setShowSuggestions(false);
     setSubmitted(true);
   };
+
+  useEffect(() => {
+    // to skip initial render in useEffect
+    if (initial.current) {
+      initial.current = false;
+      return;
+    }
+
+    // BUILD OUT AUTOCOMPLETE TERMS
+    if (searchTerm !== "" && searchTerm.length > 3) {
+      fetchAutocompleteTitles(searchTerm);
+
+      if (suggestions.length !== 0) {
+        setShowSuggestions(true);
+        return;
+      }
+      setShowSuggestions(false);
+    }
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
+
+  console.log("SUGGESTIONS: ", suggestions);
 
   return (
     <Wrapper>
@@ -23,6 +80,17 @@ const SearchBar = ({ searchTerm, setSearchTerm, setMovies, setSubmitted }) => {
             value={searchTerm}
           />
         </form>
+        {showSuggestions && (
+          <AutoSuggestions
+            items={suggestions}
+            setShowSuggestions={setShowSuggestions}
+            setSuggestions={setSuggestions}
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            setSubmitted={setSubmitted}
+            setAutocompleted={setAutocompleted}
+          />
+        )}
       </Content>
     </Wrapper>
   );

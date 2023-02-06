@@ -22,6 +22,9 @@ const Home = () => {
   const [submitted, setSubmitted] = useState(false);
   const [showNeedEndpointMessage, setShowNeedEndpointMessage] = useState(false);
 
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [autocompleted, setAutocompleted] = useState(false);
+
   const fetchMovies = async (searchTerm) => {
     console.log("HITTING FETCH MOVIES API");
     console.log("SEARCHTERM: ", searchTerm);
@@ -73,6 +76,10 @@ const Home = () => {
         setShowCodeBlock={setShowCodeBlock}
         setMovies={setMovies}
         setSubmitted={setSubmitted}
+        showSuggestions={showSuggestions}
+        setShowSuggestions={setShowSuggestions}
+        autocompleted={autocompleted}
+        setAutocompleted={setAutocompleted}
       />
       <div className="container">
         <Filter

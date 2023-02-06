@@ -28,9 +28,12 @@ export const LogoMDBFlix = styled.img`
 const Header = ({
   searchTerm,
   setSearchTerm,
-
   setMovies,
   setSubmitted,
+  showSuggestions,
+  setShowSuggestions,
+  autocompleted,
+  setAutocompleted,
 }) => (
   <Wrapper>
     <Content>
@@ -41,6 +44,10 @@ const Header = ({
           searchTerm={searchTerm}
           setMovies={setMovies}
           setSubmitted={setSubmitted}
+          showSuggestions={showSuggestions}
+          setShowSuggestions={setShowSuggestions}
+          autocompleted={autocompleted}
+          setAutocompleted={setAutocompleted}
         />
       </InputForm>
     </Content>

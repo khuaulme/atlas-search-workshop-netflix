@@ -9,8 +9,7 @@ import Filter from "./Filter/Filter";
 
 const Home = () => {
   // INSERT YOUR CREATED MOVIE ENDPOINT
-  const MOVIES_ENDPOINT_COMPOUND =
-    "https://eu-west-2.aws.data.mongodb-api.com/app/netflixclone-toyzx/endpoint/compound";
+  const MOVIES_ENDPOINT_COMPOUND = "";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

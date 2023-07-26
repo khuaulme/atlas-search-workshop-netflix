@@ -12,6 +12,8 @@ const Home = () => {
   const MOVIES_ENDPOINT_COMPOUND =
     "https://eu-west-2.aws.data.mongodb-api.com/app/netflixclone-toyzx/endpoint/moviesCompound";
 
+  console.log("In Facets lesson");
+
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCodeBlock, setShowCodeBlock] = useState(false);

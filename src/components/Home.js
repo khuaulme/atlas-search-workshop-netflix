@@ -10,7 +10,7 @@ import Filter from "./Filter/Filter";
 const Home = () => {
   // INSERT YOUR CREATED MOVIE ENDPOINT
   const MOVIES_ENDPOINT_COMPOUND =
-    "https://eu-west-2.aws.data.mongodb-api.com/app/netflixclone-toyzx/endpoint/moviesCompound";
+    "https://us-east-1.aws.data.mongodb-api.com/app/movies-wseyb/endpoint/moviesCompound";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,6 +31,10 @@ const Home = () => {
     console.log("SEARCHTERM: ", searchTerm);
 
     let GET_MOVIES_ENDPOINT = MOVIES_ENDPOINT_COMPOUND;
+    if (autocompleted) {
+      GET_MOVIES_ENDPOINT =
+        "https://us-east-1.aws.data.mongodb-api.com/app/movies-wseyb/endpoint/calledAutocompleteCompoundTitle";
+    }
 
     try {
       let data = {

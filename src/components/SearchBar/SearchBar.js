@@ -22,7 +22,6 @@ const SearchBar = ({
 
   const fetchAutocompleteTitles = async (searchTerm) => {
     if (TITLES_ENDPOINT === "") {
-      console.log("BUILD AUTOCOMPLETE ENDPOINT");
       return;
     }
     let endpoint = TITLES_ENDPOINT;
@@ -64,8 +63,6 @@ const SearchBar = ({
     return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
-
-  console.log("SUGGESTIONS: ", suggestions);
 
   return (
     <Wrapper>

@@ -32,7 +32,7 @@ const Filter = ({
   let searchObject = {
     text: {
       query: searchTerm,
-      path: ["title", "plot", "fullplot"],
+      path: "plot_embedding",
     },
   };
   let searchString = JSON.stringify(searchObject, null, 2);

@@ -50,8 +50,6 @@ const CheckboxGenres = ({ genre, setGenre, showCodeBlock }) => {
       <Wrapper>
         <ul className="genres-list">
           {movieGenresArray.map((name, index) => {
-            let count = 0;
-
             return (
               <div className="genre" key={index}>
                 <input

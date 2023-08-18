@@ -9,8 +9,11 @@ import Filter from "./Filter/Filter";
 
 const Home = () => {
   // INSERT YOUR CREATED MOVIE ENDPOINT
-  const MOVIES_ENDPOINT_COMPOUND =
-    "https://us-east-1.aws.data.mongodb-api.com/app/movies-wseyb/endpoint/moviesCompound";
+
+  const MOVIES_VECTOR_SEARCH_ENDPOINT =
+    "https://us-east-1.aws.data.mongodb-api.com/app/vectorsearchmovies-oozqp/endpoint/semanticMovieSearch";
+  let MOVIES_SEMANTIC_ADVANCED =
+    "https://us-east-1.aws.data.mongodb-api.com/app/vectorsearchmovies-oozqp/endpoint/semanticMovieSearchAdvanced";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,15 +33,11 @@ const Home = () => {
     console.log("HITTING FETCH MOVIES API");
     console.log("SEARCHTERM: ", searchTerm);
 
-    let GET_MOVIES_ENDPOINT = MOVIES_ENDPOINT_COMPOUND;
-    if (autocompleted) {
-      GET_MOVIES_ENDPOINT =
-        "https://us-east-1.aws.data.mongodb-api.com/app/movies-wseyb/endpoint/calledAutocompleteCompoundTitle";
-    }
+    let GET_MOVIES_ENDPOINT = MOVIES_SEMANTIC_ADVANCED;
 
     try {
       let data = {
-        searchTerm: searchTerm,
+        semanticSearchTerms: searchTerm,
         start: dateStart,
         end: dateEnd,
         genre: genre,
@@ -48,7 +47,7 @@ const Home = () => {
 
       axios.post(GET_MOVIES_ENDPOINT, data).then((res) => {
         console.log(res.data);
-        setMovies(res.data.movies);
+        setMovies(res.data);
       });
     } catch (error) {
       console.log(error);
@@ -57,7 +56,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!submitted) return;
-    if (MOVIES_ENDPOINT_COMPOUND === "") {
+    if (MOVIES_VECTOR_SEARCH_ENDPOINT === "") {
       console.log("");
       setShowNeedEndpointMessage(true);
       return;

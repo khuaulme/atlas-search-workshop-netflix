@@ -19,15 +19,16 @@ try {
   //   await listDatabases(client);
 } catch (e) {
   console.error(e);
+  process.exit();
 }
 
-const db = conn.db("sample_movies");
+const db = conn.db("sample_mflix");
 
 export default db;
 
-async function listDatabases(client) {
-  const databasesList = await client.db().admin().listDatabases();
+// async function listDatabases(client) {
+//   const databasesList = await client.db().admin().listDatabases();
 
-  console.log("Databases:");
-  databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
-}
+//   console.log("Databases:");
+//   databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
+// }

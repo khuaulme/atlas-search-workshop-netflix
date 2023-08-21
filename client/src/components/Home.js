@@ -10,7 +10,8 @@ import Filter from "./Filter/Filter";
 const Home = () => {
   // INSERT YOUR CREATED MOVIE ENDPOINT
 
-  const MOVIES_VECTOR_SEARCH_ENDPOINT = "http://localhost:5050/getMovie";
+  const MOVIES_VECTOR_SEARCH_ENDPOINT =
+    "http://localhost:5050/getSemanticMovieSearch";
 
   //   "https://us-east-1.aws.data.mongodb-api.com/app/vectorsearchmovies-oozqp/endpoint/semanticMovieSearch";
   let MOVIES_SEMANTIC_ADVANCED =
@@ -34,13 +35,13 @@ const Home = () => {
     console.log("HITTING FETCH MOVIES API");
     console.log("SEARCHTERM: ", searchTerm);
 
-    let GET_MOVIES_ENDPOINT = `${MOVIES_VECTOR_SEARCH_ENDPOINT}?arg=${searchTerm}`;
+    let GET_MOVIES_ENDPOINT = `${MOVIES_VECTOR_SEARCH_ENDPOINT}?searchTerms=${searchTerm}`;
     console.log("ENDPOINT: ", GET_MOVIES_ENDPOINT);
 
     try {
       const returnedMovies = await (await fetch(GET_MOVIES_ENDPOINT)).json();
-      setMovies(returnedMovies);
-      console.log("MOVIES: ", returnedMovies);
+      setMovies(returnedMovies.movies);
+      console.log("MOVIES: ", returnedMovies.movies);
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +116,7 @@ const Home = () => {
           <div className="needEndpoint">Build Movie 📽️ Endpoint Please</div>
         ) : (
           <Grid header={searchTerm ? null : "Movie Search Results"}>
-            {/* {movies.map((movie) => (
+            {movies.map((movie) => (
               <Thumb
                 key={movie._id}
                 movie={movie}
@@ -125,7 +126,7 @@ const Home = () => {
                   movie.poster ? movie.poster : "http://bit.ly/AtlasMoviePoster"
                 }
               ></Thumb>
-            ))}  */}
+            ))}
           </Grid>
         )}
       </div>{" "}

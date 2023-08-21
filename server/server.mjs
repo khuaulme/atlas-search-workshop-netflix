@@ -4,14 +4,19 @@ import "./loadEnvironment.mjs";
 import express from "express";
 import axios from "axios";
 import cors from "cors";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient } from "mongodb";
 
 //import routes from "./routes/api.mjs";
 
 const PORT = process.env.PORT || 5050;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 const app = express();
-
+app.use(cors(corsOptions));
 app.use(express.json());
 // initialize routes
 //app.use(routes);
@@ -24,13 +29,7 @@ app.listen(PORT, () => {
 });
 
 //Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(connectionString, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+const client = new MongoClient(connectionString);
 
 try {
   // Connect the client to the server	(optional starting in v4.7)
@@ -48,55 +47,17 @@ try {
     const searchTerms = req.query.searchTerms;
     console.log(searchTerms);
     try {
-      console.log("GETTING EMBEDDINGS");
-      const url = "https://api.openai.com/v1/embeddings";
+      const embedding = await getTermEmbeddings(searchTerms);
 
-      // var serviceName = "mongodb-atlas";
-
-      // Call OpenAI API to get the embeddings.
-      let response = await axios.post(
-        url,
-        {
-          input: "dogs, sunflowers, & puppies",
-          model: "text-embedding-ada-002",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        console.log("SUCCESS");
+      if (embedding !== null) {
+        const movies = await vectorSearchForMovies(embedding, collection);
+        console.log(movies);
         res.json({
-          msg: "Success",
-          movies: ["World War Z", "Pet Detective"],
-          searchTerms,
-          embedding: response.data.data[0].embedding,
+          movies,
         });
-      } else {
-        throw new Error(
-          `Failed to get embedding. Status code: ${response.status}`
-        );
       }
-
-      //   const embedding = await context.functions.execute(
-      //     "getTermEmbeddings",
-      //     semanticSearchTerms
-      //   );
-      //   const movies = await context.functions.execute(
-      //     "vectorSearchForMovies",
-      //     embedding
-      //   );
-
-      //   console.log(movies);
-
-      //   res.json(movies);
     } catch (err) {
-      console.error(
-        `Something went wrong trying to find one document: ${err}\n`
-      );
+      console.error(`Something went wrong: ${err}\n`);
       res.json(err);
     }
   });
@@ -117,11 +78,11 @@ try {
   console.log(error);
 }
 
+// HELPER FUNCTIONS
 const getTermEmbeddings = async (query) => {
   console.log("GETTING EMBEDDINGS");
+
   const url = "https://api.openai.com/v1/embeddings";
-  const openai_key = "sk - kp2664j42a0WSGh047zgT3BlbkFJ2ve0mX0bnvGE0hSlesuq";
-  // var serviceName = "mongodb-atlas";
 
   // Call OpenAI API to get the embeddings.
   let response = await axios.post(
@@ -132,7 +93,7 @@ const getTermEmbeddings = async (query) => {
     },
     {
       headers: {
-        Authorization: `Bearer ${openai_key}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
     }
@@ -143,4 +104,34 @@ const getTermEmbeddings = async (query) => {
   } else {
     throw new Error(`Failed to get embedding. Status code: ${response.status}`);
   }
+};
+
+const vectorSearchForMovies = async (embeddedSearchTerms, collection) => {
+  const movies = await collection
+    .aggregate([
+      {
+        $search: {
+          index: "default",
+          knnBeta: {
+            vector: embeddedSearchTerms,
+            path: "plot_embedding",
+            k: 20,
+          },
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          year: 1,
+          "imdb.rating": 1,
+          fullplot: 1,
+          poster: 1,
+          released: 1,
+          genres: 1,
+          score: { $meta: "searchScore" },
+        },
+      },
+    ])
+    .toArray();
+  return movies;
 };

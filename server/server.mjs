@@ -10,13 +10,10 @@ import { MongoClient } from "mongodb";
 
 const PORT = process.env.PORT || 5050;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const corsOptions = {
-  origin: "*",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
+
 app.use(express.json());
 // initialize routes
 //app.use(routes);
@@ -62,15 +59,30 @@ try {
     }
   });
 
-  app.post("/searchMovies", async (req, res) => {
-    console.log("In search POST");
-    //req.body
+  app.post("/searchMoviesAdvanced", async (req, res) => {
+    console.log("POST CALL: ADVANCED VECTOR SEARCHING FOR MOVIES");
+    const { semanticSearchTerms } = req.body;
 
-    res.json({
-      msg: "Success",
-      movies: ["World War Z", "Pet Detective"],
-      body: req.body,
-    });
+    console.log("SEARCH TERMS FROM BODY: ", semanticSearchTerms);
+    try {
+      const embedding = await getTermEmbeddings(semanticSearchTerms);
+
+      if (embedding !== null) {
+        const movies = await vectorSearchForMoviesAdvanced(
+          embedding,
+          req.body,
+          collection
+        );
+
+        console.log(movies);
+        res.json({
+          movies,
+        });
+      }
+    } catch (err) {
+      console.error(`Something went wrong from POST: ${err}\n`);
+      res.json(err);
+    }
   });
 
   // ------------------- END API ROUTES-------------------------
@@ -79,6 +91,10 @@ try {
 }
 
 // HELPER FUNCTIONS
+
+/*--------------------------------------------------------
+ GetTermEmbeddings FUNCTION RETURNS EMBEDDINGS FOR TERMS
+---------------------------------------------------------*/
 const getTermEmbeddings = async (query) => {
   console.log("GETTING EMBEDDINGS");
 
@@ -106,6 +122,10 @@ const getTermEmbeddings = async (query) => {
   }
 };
 
+/*--------------------------------------------------------
+VECTORSEARCHFORMOVIES RUNS $SEARCH AGGREGATION 
+returns movies array
+---------------------------------------------------------*/
 const vectorSearchForMovies = async (embeddedSearchTerms, collection) => {
   const movies = await collection
     .aggregate([
@@ -134,4 +154,86 @@ const vectorSearchForMovies = async (embeddedSearchTerms, collection) => {
     ])
     .toArray();
   return movies;
+};
+
+/*-------------------------------------------------------------------
+VECTORSEARCHFORMOVIESADVANCED RUNS $SEARCH AGGREGATION WITH FILTER
+returns movies array
+---------------------------------------------------------------------*/
+const vectorSearchForMoviesAdvanced = async (
+  embeddedSearchTerms,
+  data,
+  collection
+) => {
+  const { start, end, genre, rating } = data;
+  const ratingInt = parseInt(rating);
+
+  const ratingObject = {
+    range: {
+      path: "imdb.rating",
+      gte: ratingInt,
+      lte: 10,
+    },
+  };
+
+  const genreObject = {
+    text: {
+      query: genre,
+      path: "genres",
+    },
+  };
+  const releaseObject = {
+    range: {
+      path: "released",
+      gte: new Date(start),
+      lte: new Date(end),
+    },
+  };
+
+  let compoundFilterObject = {
+    compound: {
+      filter: [ratingObject, releaseObject],
+    },
+  };
+
+  if (genre.length > 0) {
+    compoundFilterObject = {
+      compound: {
+        filter: [ratingObject, genreObject, releaseObject],
+      },
+    };
+  }
+  //   console.log("COMPOUND OBJECT: ", JSON.stringify(compoundFilterObject));
+  const filteredMovies = await collection
+    .aggregate([
+      {
+        $search: {
+          index: "default",
+          knnBeta: {
+            vector: embeddedSearchTerms,
+            path: "plot_embedding",
+            k: 3,
+            filter: compoundFilterObject,
+          },
+        },
+      },
+
+      {
+        $project: {
+          title: 1,
+          year: 1,
+          "imdb.rating": 1,
+          fullplot: 1,
+          poster: 1,
+          released: 1,
+          genres: 1,
+          score: {
+            $meta: "searchScore",
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  return filteredMovies;
 };

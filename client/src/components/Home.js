@@ -13,9 +13,8 @@ const Home = () => {
   const MOVIES_VECTOR_SEARCH_ENDPOINT =
     "http://localhost:5050/getSemanticMovieSearch";
 
-  //   "https://us-east-1.aws.data.mongodb-api.com/app/vectorsearchmovies-oozqp/endpoint/semanticMovieSearch";
-  let MOVIES_SEMANTIC_ADVANCED =
-    "https://us-east-1.aws.data.mongodb-api.com/app/vectorsearchmovies-oozqp/endpoint/semanticMovieSearchAdvanced";
+  let MOVIES_VECTOR_SEARCH_ADVANCED_ENDPOINT =
+    "http://localhost:5050/searchMoviesAdvanced";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,38 +30,41 @@ const Home = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [autocompleted, setAutocompleted] = useState(false);
 
-  const fetchMovies = async (searchTerm) => {
+  const getMovies = async (searchTerm) => {
     console.log("HITTING FETCH MOVIES API");
     console.log("SEARCHTERM: ", searchTerm);
 
-    let GET_MOVIES_ENDPOINT = `${MOVIES_VECTOR_SEARCH_ENDPOINT}?searchTerms=${searchTerm}`;
+    const GET_MOVIES_ENDPOINT = `${MOVIES_VECTOR_SEARCH_ENDPOINT}?searchTerms=${searchTerm}`;
     console.log("ENDPOINT: ", GET_MOVIES_ENDPOINT);
 
     try {
       const returnedMovies = await (await fetch(GET_MOVIES_ENDPOINT)).json();
       setMovies(returnedMovies.movies);
-      console.log("MOVIES: ", returnedMovies.movies);
+      console.log("MOVIES FROM THE FRONT END: ", returnedMovies.movies);
     } catch (error) {
       console.log(error);
     }
+  };
 
-    // try {
-    //   let data = {
-    //     semanticSearchTerms: searchTerm,
-    //     start: dateStart,
-    //     end: dateEnd,
-    //     genre: genre,
-    //     rating: sliderValue,
-    //   };
-    //   console.log("GENRES: ", genre);
+  const getMoviesAdvanced = async (searchTerm) => {
+    console.log("IN ADVANCED SEARCH FROM FRONT END");
+    const GET_MOVIES_ENDPOINT = MOVIES_VECTOR_SEARCH_ADVANCED_ENDPOINT;
+    let data = {
+      semanticSearchTerms: searchTerm,
+      start: dateStart,
+      end: dateEnd,
+      genre: genre,
+      rating: sliderValue,
+    };
 
-    //   axios.post(GET_MOVIES_ENDPOINT, data).then((res) => {
-    //     console.log(res.data);
-    //     setMovies(res.data);
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      axios.post(GET_MOVIES_ENDPOINT, data).then((res) => {
+        console.log(res.data);
+        setMovies(res.data.movies);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const Home = () => {
     }
     setShowNeedEndpointMessage(false);
 
-    fetchMovies(searchTerm);
+    getMoviesAdvanced(searchTerm);
 
     setSubmitted(false);
 

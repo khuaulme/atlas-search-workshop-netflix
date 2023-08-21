@@ -19,7 +19,7 @@ const getTermEmbeddings = async (query) => {
     body: JSON.stringify({
       input: query,
       model: "text-embedding-ada-002",
-    }),
+    })
   }).then((res) => res.json());
 
   return response.data[0].embedding;

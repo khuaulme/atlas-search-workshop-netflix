@@ -41,7 +41,7 @@ export default class MovieController {
   returns movies array
   ---------------------------------------------------------------------*/
   async vectorSearchAdvanced(embeddedSearchTerms, data) {
-    const collection = db.collection("movies");
+    const collection = db.collection("embedded_movies");
     const { start, end, genre, rating } = data;
     const ratingInt = parseInt(rating);
 

@@ -38,10 +38,7 @@ router.get("/semantic", async (req, res) => {
     const embedding = await getTermEmbeddings(searchTerms);
 
     if (embedding !== null) {
-      const movies = await movieController.vectorSearch(
-        embedding,
-        "embedded_movies"
-      );
+      const movies = await movieController.vectorSearch(embedding);
       console.log(movies);
       return res.json({
         movies,

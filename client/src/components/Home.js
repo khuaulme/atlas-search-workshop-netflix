@@ -76,6 +76,7 @@ const Home = () => {
     setShowNeedEndpointMessage(false);
 
     getMovies(searchTerm);
+    // getMoviesAdvanced(searchTerm);
 
     setSubmitted(false);
 

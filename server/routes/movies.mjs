@@ -38,7 +38,10 @@ router.get("/semantic", async (req, res) => {
     const embedding = await getTermEmbeddings(searchTerms);
 
     if (embedding !== null) {
-      const movies = await movieController.vectorSearch(embedding, collection);
+      const movies = await movieController.vectorSearch(
+        embedding,
+        "embedded_movies"
+      );
       console.log(movies);
       return res.json({
         movies,
@@ -47,7 +50,7 @@ router.get("/semantic", async (req, res) => {
       return res.statusCode(401).send("No embedding found");
     }
   } catch (err) {
-    console.error(`Something went wrong: ${err}\n`);
+    console.error(`Something went wrong in semantic endpoint: ${err}\n`);
     res.json(err);
   }
 });

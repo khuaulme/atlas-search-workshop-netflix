@@ -5,7 +5,7 @@ const connectionString = process.env.ATLAS_URI || "";
 const client = new MongoClient(connectionString, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: true,
+    strict: false,
     deprecationErrors: true,
   },
 });
@@ -21,7 +21,6 @@ try {
   console.error(e);
   process.exit();
 }
-
 const db = conn.db("sample_mflix");
 
 export default db;

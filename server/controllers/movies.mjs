@@ -6,7 +6,8 @@ export default class MovieController {
   returns movies array
   ---------------------------------------------------------*/
   async vectorSearch(embeddedSearchTerms) {
-    const movies = await db.collection("movies")
+    const movies = await db
+      .collection("embedded_movies")
       .aggregate([
         {
           $search: {
@@ -33,7 +34,7 @@ export default class MovieController {
       ])
       .toArray();
     return movies;
-  };
+  }
 
   /*-------------------------------------------------------------------
   VECTORSEARCHFORMOVIESADVANCED RUNS $SEARCH AGGREGATION WITH FILTER
@@ -112,6 +113,5 @@ export default class MovieController {
       .toArray();
 
     return filteredMovies;
-  };
-
+  }
 }

@@ -10,11 +10,10 @@ import Filter from "./Filter/Filter";
 const Home = () => {
   // INSERT YOUR CREATED MOVIE ENDPOINT
 
-  const MOVIES_VECTOR_SEARCH_ENDPOINT =
-    "http://localhost:5050/getSemanticMovieSearch";
+  const MOVIES_VECTOR_SEARCH_ENDPOINT = "http://localhost:5050/movies/semantic";
 
   let MOVIES_VECTOR_SEARCH_ADVANCED_ENDPOINT =
-    "http://localhost:5050/searchMoviesAdvanced";
+    "http://localhost:5050/movies/semantic/advanced";
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -76,7 +75,7 @@ const Home = () => {
     }
     setShowNeedEndpointMessage(false);
 
-    getMoviesAdvanced(searchTerm);
+    getMovies(searchTerm);
 
     setSubmitted(false);
 

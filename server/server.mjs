@@ -5,7 +5,7 @@ import cors from "cors";
 import routes from "./routes/movies.mjs";
 
 const PORT = process.env.PORT || 5050;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 
 const app = express();
 app.use(cors());

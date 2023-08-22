@@ -1,5 +1,5 @@
 import { Router } from "express";
-import getTermEmbeddings from "../embeddings/openai.mjs";
+import getTermEmbeddings from "../embeddings/index.mjs";
 import MovieController from "../controllers/movies.mjs";
 
 const router = Router();
@@ -19,10 +19,7 @@ router.post("/semantic/advanced", async (req, res) => {
         req.body
       );
 
-      console.log(movies);
-      res.json({
-        movies,
-      });
+      res.json(movies);
     }
   } catch (err) {
     console.error(`Something went wrong from POST: ${err}\n`);
@@ -39,10 +36,7 @@ router.get("/semantic", async (req, res) => {
 
     if (embedding !== null) {
       const movies = await movieController.vectorSearch(embedding);
-      console.log(movies);
-      return res.json({
-        movies,
-      });
+      return res.json(movies);
     } else {
       return res.statusCode(401).send("No embedding found");
     }

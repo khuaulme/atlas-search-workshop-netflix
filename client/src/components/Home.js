@@ -38,29 +38,8 @@ const Home = () => {
 
     try {
       const returnedMovies = await (await fetch(GET_MOVIES_ENDPOINT)).json();
-      setMovies(returnedMovies.movies);
-      console.log("MOVIES FROM THE FRONT END: ", returnedMovies.movies);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getMoviesAdvanced = async (searchTerm) => {
-    console.log("IN ADVANCED SEARCH FROM FRONT END");
-    const GET_MOVIES_ENDPOINT = MOVIES_VECTOR_SEARCH_ADVANCED_ENDPOINT;
-    let data = {
-      semanticSearchTerms: searchTerm,
-      start: dateStart,
-      end: dateEnd,
-      genre: genre,
-      rating: sliderValue,
-    };
-
-    try {
-      axios.post(GET_MOVIES_ENDPOINT, data).then((res) => {
-        console.log(res.data);
-        setMovies(res.data.movies);
-      });
+      setMovies(returnedMovies);
+      console.log("MOVIES FROM THE FRONT END: ", returnedMovies);
     } catch (error) {
       console.log(error);
     }

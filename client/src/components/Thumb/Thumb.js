@@ -15,7 +15,7 @@ const Thumb = ({ movie, image, movieID, clickable }) => {
 
   const rating = movie.imdb.rating;
   const releaseDate = movie.released;
-  const releaseString = releaseDate.slice(0, 10);
+  const releaseString = releaseDate?.slice(0, 10);
 
   let genreString = "";
   if (movie.genres) {
